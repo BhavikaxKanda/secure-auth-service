@@ -1,0 +1,126 @@
+openapi: 3.0.0
+info:
+  title: Secure User Authentication & Authorization Service
+  description: A backend microservice handling user registration, login, and JWT-based authentication for the Ultimez internship project.
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:5000/api/auth
+    description: Local development server
+
+paths:
+  /register:
+    post:
+      summary: Register a new user
+      tags:
+        - Authentication
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+                - username
+                - password
+              properties:
+                email:
+                  type: string
+                  example: test@example.com
+                username:
+                  type: string
+                  example: testuser1
+                password:
+                  type: string
+                  example: TestPass123
+      responses:
+        '201':
+          description: Account created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Account created successfully
+                  user:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      email:
+                        type: string
+                      username:
+                        type: string
+        '400':
+          description: Validation error (invalid email, weak password, etc.)
+        '409':
+          description: Email or username already taken
+
+  /login:
+    post:
+      summary: Log in an existing user
+      tags:
+        - Authentication
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - identifier
+                - password
+              properties:
+                identifier:
+                  type: string
+                  description: Email or username
+                  example: test@example.com
+                password:
+                  type: string
+                  example: TestPass123
+      responses:
+        '200':
+          description: Login successful, returns access and refresh tokens
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  accessToken:
+                    type: string
+                  refreshToken:
+                    type: string
+        '401':
+          description: Invalid email/username or password
+
+  /me:
+    get:
+      summary: Get the currently authenticated user's ID
+      tags:
+        - Authentication
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Returns the authenticated user's ID
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  userId:
+                    type: string
+        '401':
+          description: No token provided
+        '403':
+          description: Token is invalid or has expired
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
