@@ -29,10 +29,10 @@ This is Month 1 of a 3-month project. This phase covers the authentication found
 
 ## Project Structure
 
-\`\`\`
+​```
 secure-auth-service/
 ├── prisma/
-│   ├── schema.prisma       # Database models (User, Role, Permission, Session)
+│   ├── schema.prisma
 │   └── migrations/
 ├── src/
 │   ├── controllers/
@@ -53,7 +53,7 @@ secure-auth-service/
 ├── swagger.yaml
 ├── server.js
 └── README.md
-\`\`\`
+​```
 
 ## Setup Instructions
 
