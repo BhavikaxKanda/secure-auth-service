@@ -64,3 +64,15 @@ model PasswordResetToken {
   isUsed    Boolean  @default(false)
   createdAt DateTime @default(now())
 }
+// 6. Audit Logging & Security Monitoring Model
+model AuditLog {
+  id        String   @id @default(uuid())
+  userId    String?
+  action    String
+  resource  String
+  ipAddress String?
+  userAgent String?
+  status    String   // SUCCESS, FAILED, BLOCKED
+  details   String?
+  createdAt DateTime @default(now())
+}
