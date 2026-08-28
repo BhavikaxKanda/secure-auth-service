@@ -1,17 +1,11 @@
-const express = require('express');
-const router = express.Router();
+import { Router } from 'express';
+import { register, login, refreshAccessToken, logout } from '../controllers/auth.controller.js';
 
-const { register, login } = require('../controllers/auth.controller');
-const validate = require('../middleware/validate.middleware');
-const { registerSchema, loginSchema } = require('../validators/auth.validator');
-const authMiddleware = require('../middleware/auth.middleware');
+const router = Router();
 
-router.post('/register', validate(registerSchema), register);
-router.post('/login', validate(loginSchema), login);
+router.post('/register', register);
+router.post('/login', login);
+router.post('/refresh', refreshAccessToken);
+router.post('/logout', logout);
 
-// simple protected route just to prove the middleware works
-router.get('/me', authMiddleware, (req, res) => {
-  res.json({ userId: req.user.userId });
-});
-
-module.exports = router;
+export default router;

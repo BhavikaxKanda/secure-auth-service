@@ -1,46 +1,27 @@
 {
   "name": "secure-auth-service",
   "version": "1.0.0",
-  "description": "Secure User Authentication &amp; Authorization Service — Backend + Security Project (Ultimez Internship)",
-  "main": "index.js",
+  "type": "module",
+  "description": "Secure User Authentication & Authorization Service",
+  "main": "server.js",
   "scripts": {
     "dev": "nodemon server.js",
     "start": "node server.js"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/BhavikaxKanda/secure-auth-service.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "type": "commonjs",
-  "bugs": {
-    "url": "https://github.com/BhavikaxKanda/secure-auth-service/issues"
-  },
-  "homepage": "https://github.com/BhavikaxKanda/secure-auth-service#readme",
   "dependencies": {
     "@prisma/client": "^6.19.3",
     "bcrypt": "^6.0.0",
-    "cors": "^2.8.6",
-    "dotenv": "^17.4.2",
-    "express": "^5.2.1",
-    "helmet": "^8.2.0",
-    "joi": "^18.2.3",
-    "jsonwebtoken": "^9.0.3",
-    "prisma": "^6.19.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.2",
+    "pg": "^8.13.3",
+    "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1",
-    "yamljs": "^0.3.0"
+    "zod": "^3.24.2"
   },
   "devDependencies": {
-    "@types/node": "^26.1.0",
-    "nodemon": "^3.1.14"
-  },
-  "allowScripts": {
-    "bcrypt@6.0.0": true,
-    "@prisma/client@6.19.3": true,
-    "prisma@6.19.3": true,
-    "@prisma/engines@6.19.3": true,
-    "@scarf/scarf@1.4.0": true
+    "nodemon": "^3.1.14",
+    "prisma": "^6.19.3"
   }
 }

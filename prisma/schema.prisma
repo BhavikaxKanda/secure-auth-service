@@ -7,41 +7,60 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// 1. User Model
 model User {
-  id           String    @id @default(uuid())
-  email        String    @unique
-  username     String    @unique
-  passwordHash String
-  isActive     Boolean   @default(true)
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime  @updatedAt
-
-  roleId       String?
-  role         Role?     @relation(fields: [roleId], references: [id])
-  sessions     Session[]
+  id                  String               @id @default(uuid())
+  email               String               @unique
+  username            String               @unique
+  passwordHash        String
+  isActive            Boolean              @default(true)
+  roleId              String?
+  role                Role?                @relation(fields: [roleId], references: [id])
+  sessions            Session[]
+  passwordResetTokens PasswordResetToken[]
+  createdAt           DateTime             @default(now())
+  updatedAt           DateTime             @updatedAt
 }
 
+// 2. Role Model (e.g., ADMIN, MANAGER, USER)
 model Role {
   id          String       @id @default(uuid())
   name        String       @unique
+  description String?
   users       User[]
-  permissions Permission[] @relation("RolePermissions")
+  permissions Permission[]
+  createdAt   DateTime     @default(now())
 }
 
+// 3. Permission Model (e.g., user:create, user:read, role:assign)
 model Permission {
-  id    String @id @default(uuid())
-  name  String @unique
-  roles Role[] @relation("RolePermissions")
+  id          String   @id @default(uuid())
+  name        String   @unique
+  description String?
+  roles       Role[]
+  createdAt   DateTime @default(now())
 }
 
+// 4. Session Model (Active sessions & Refresh token tracking)
 model Session {
   id           String   @id @default(uuid())
   userId       String
-  user         User     @relation(fields: [userId], references: [id])
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   refreshToken String   @unique
   userAgent    String?
   ipAddress    String?
   isRevoked    Boolean  @default(false)
-  createdAt    DateTime @default(now())
   expiresAt    DateTime
+  createdAt    DateTime @default(now())
+}
+
+// 5. Password Reset Token Model
+model PasswordResetToken {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tokenHash String   @unique
+  expiresAt DateTime
+  isUsed    Boolean  @default(false)
+  createdAt DateTime @default(now())
 }

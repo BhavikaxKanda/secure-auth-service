@@ -1,25 +1,26 @@
-const express = require('express');
-const helmet = require('helmet');
-const cors = require('cors');
-const swaggerUi = require('swagger-ui-express');
-const YAML = require('yamljs');
-const path = require('path');
-
-const authRoutes = require('./routes/auth.routes');
+import express from 'express';
+import cors from 'cors';
+import authRoutes from './routes/auth.routes.js';
+import roleRoutes from './routes/role.routes.js';
+import sessionRoutes from './routes/session.routes.js';
+import userRoutes from './routes/user.routes.js';
+import { requestPasswordReset, resetPassword } from './controllers/passwordReset.controller.js';
 
 const app = express();
 
-app.use(helmet());
 app.use(cors());
 app.use(express.json());
 
-const swaggerDocument = YAML.load(path.join(__dirname, '..', 'swagger.yaml'));
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
-
+// Base Auth Routes
 app.use('/api/auth', authRoutes);
 
-app.get('/', (req, res) => {
-  res.json({ status: 'Auth service is up and running' });
-});
+// Password Reset Endpoints
+app.post('/api/auth/forgot-password', requestPasswordReset);
+app.post('/api/auth/reset-password', resetPassword);
 
-module.exports = app;
+// Phase 2 Protected Service Routes
+app.use('/api/rbac', roleRoutes);
+app.use('/api/sessions', sessionRoutes);
+app.use('/api/users', userRoutes);
+
+export default app;
